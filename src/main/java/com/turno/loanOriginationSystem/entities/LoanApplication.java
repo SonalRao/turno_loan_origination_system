@@ -41,7 +41,7 @@ import java.util.UUID;
                 )
         }
 )
-public class LoanApplications {
+public class LoanApplication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,11 +60,9 @@ public class LoanApplications {
     private BigDecimal loanAmount;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private LoanType loanType;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ApplicationStatus applicationStatus;
 
     private Long assignedAgentId;

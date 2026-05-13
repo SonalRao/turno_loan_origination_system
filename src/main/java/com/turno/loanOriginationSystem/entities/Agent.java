@@ -23,7 +23,7 @@ import lombok.*;
                 )
         }
 )
-public class Agents {
+public class Agent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

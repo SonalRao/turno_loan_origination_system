@@ -2,11 +2,12 @@ package com.turno.loanOriginationSystem.service;
 
 import com.turno.loanOriginationSystem.dto.LoanRequest;
 import com.turno.loanOriginationSystem.dto.LoanResponse;
-import com.turno.loanOriginationSystem.entities.LoanApplications;
+import com.turno.loanOriginationSystem.entities.LoanApplication;
 import com.turno.loanOriginationSystem.enums.ApplicationStatus;
 import com.turno.loanOriginationSystem.repo.LoanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -16,12 +17,10 @@ public class LoanService {
     private final LoanRepository loanRepository;
 
     @Transactional
-    public com.turno.loanOriginationSystem.dto.LoanResponse createLoan(
-            LoanRequest request,
-            String idempotencyKey
-    ) {
-
-        return loanRepository.findByIdempotencyKey(idempotencyKey)
+    public LoanResponse createLoan(LoanRequest request, String idempotencyKey) {
+        try
+        {
+            return loanRepository.findByIdempotencyKey(idempotencyKey)
                 .map(existingLoan -> LoanResponse.builder()
                         .loanId(existingLoan.getLoanId())
                         .status(existingLoan.getApplicationStatus())
@@ -29,6 +28,15 @@ public class LoanService {
                 .orElseGet(() ->
                         createNewLoan(request, idempotencyKey)
                 );
+        }catch (DataIntegrityViolationException ex){
+            LoanApplication existingLoan = loanRepository.findByIdempotencyKey(idempotencyKey)
+                                            .orElseThrow(() -> new IllegalStateException("Loan exists but could not be fetched"));
+
+            return LoanResponse.builder()
+                    .loanId(existingLoan.getLoanId())
+                    .status(existingLoan.getApplicationStatus())
+                    .build();
+        }
     }
 
     private LoanResponse createNewLoan(
@@ -36,7 +44,7 @@ public class LoanService {
             String idempotencyKey
     ) {
 
-        LoanApplications loan = new LoanApplications();
+        LoanApplication loan = new LoanApplication();
 
         loan.setCustomerName(request.getCustomerName());
         loan.setCustomerPhone(request.getCustomerPhone());
@@ -47,7 +55,7 @@ public class LoanService {
 
         loan.setIdempotencyKey(idempotencyKey);
 
-        LoanApplications savedLoan =
+        LoanApplication savedLoan =
                 loanRepository.save(loan);
 
         return LoanResponse.builder()

@@ -1,12 +1,12 @@
 package com.turno.loanOriginationSystem.repo;
 
-import com.turno.loanOriginationSystem.entities.Agents;
+import com.turno.loanOriginationSystem.entities.Agent;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.*;
 import java.util.Optional;
 
 public interface AgentRepository
-        extends JpaRepository<Agents, Long> {
+        extends JpaRepository<Agent, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query(value = """
@@ -19,5 +19,5 @@ public interface AgentRepository
             FOR UPDATE SKIP LOCKED
             """,
             nativeQuery = true)
-    Optional<Agents> fetchAvailableAgent();
+    Optional<Agent> fetchAvailableAgent();
 }
