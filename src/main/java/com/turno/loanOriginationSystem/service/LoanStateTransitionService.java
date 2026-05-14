@@ -22,14 +22,13 @@ public class LoanStateTransitionService {
     @Transactional
     public void updateFinalStatus(Long loanId, ApplicationStatus status) {
         LoanApplication loan = loanRepository.findById(loanId).orElseThrow();
-
         loan.setApplicationStatus(status);
+
         loanRepository.save(loan);
     }
-    @Transactional
+
     public LoanApplication getLoanById(String loanId) {
 
-        return loanRepository.findByLoanId(loanId)
-                .orElseThrow(() -> new IllegalStateException("Loan not found for id: " + loanId));
+        return loanRepository.findByLoanId(loanId).orElseThrow(() -> new IllegalStateException("Loan not found for id: " + loanId));
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -57,5 +58,10 @@ public class LoanController {
     @GetMapping("/status-count")
     public ResponseEntity<Map<ApplicationStatus, Long>> getLoanStatusCounts() {
         return ResponseEntity.ok(loanService.getLoanStatusCounts());
+    }
+
+    @GetMapping("/customers/top")
+    public ResponseEntity<List<TopCustomerResponse>> fetchTopCustomers() {
+        return ResponseEntity.ok(loanService.fetchTopCustomers());
     }
 }

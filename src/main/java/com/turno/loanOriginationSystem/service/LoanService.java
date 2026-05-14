@@ -1,9 +1,6 @@
 package com.turno.loanOriginationSystem.service;
 
-import com.turno.loanOriginationSystem.dto.AssignedLoanResponse;
-import com.turno.loanOriginationSystem.dto.LoanDetailResponse;
-import com.turno.loanOriginationSystem.dto.LoanRequest;
-import com.turno.loanOriginationSystem.dto.LoanResponse;
+import com.turno.loanOriginationSystem.dto.*;
 import com.turno.loanOriginationSystem.entities.LoanApplication;
 import com.turno.loanOriginationSystem.enums.ApplicationStatus;
 import com.turno.loanOriginationSystem.repo.LoanRepository;
@@ -119,5 +116,11 @@ public class LoanService {
                                 )
                                 .build()
                 );
+    }
+
+    public List<TopCustomerResponse> fetchTopCustomers() {
+        Pageable pageable = PageRequest.of(0, 3);
+
+        return loanRepository.fetchTopCustomers(pageable);
     }
 }

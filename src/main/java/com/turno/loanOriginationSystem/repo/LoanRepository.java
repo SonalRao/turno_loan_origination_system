@@ -1,5 +1,6 @@
 package com.turno.loanOriginationSystem.repo;
 
+import com.turno.loanOriginationSystem.dto.TopCustomerResponse;
 import com.turno.loanOriginationSystem.entities.LoanApplication;
 import com.turno.loanOriginationSystem.enums.ApplicationStatus;
 import org.springframework.data.domain.Page;
@@ -83,4 +84,20 @@ public interface LoanRepository
        GROUP BY l.applicationStatus
        """)
     List<Object[]> fetchLoanStatusCounts();
+
+    @Query("""
+       SELECT new com.turno.loanOriginationSystem.dto.TopCustomerResponse(
+            l.customerName,
+            COUNT(l)
+       )
+       FROM LoanApplication l
+       WHERE l.applicationStatus IN (
+            com.turno.loanOriginationSystem.enums.ApplicationStatus.APPROVED_BY_SYSTEM,
+            com.turno.loanOriginationSystem.enums.ApplicationStatus.APPROVED_BY_AGENT
+       )
+       GROUP BY l.customerName
+       ORDER BY COUNT(l) DESC
+       """)
+    List<TopCustomerResponse> fetchTopCustomers(Pageable pageable);
+
 }

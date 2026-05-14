@@ -14,6 +14,7 @@ public class LoanProcessingService {
     private final LoanStateTransitionService loanStateTransitionService;
     private final LoanDecisionService loanDecisionService;
     private final AgentLoanAssignService agentLoanAssignService;
+    private final NotificationService notificationService;
 
     @Async("loanExecutor")
     public void processLoan(String loanId) {
@@ -24,10 +25,14 @@ public class LoanProcessingService {
             simulateProcessingDelay();
             ApplicationStatus finalStatus = loanDecisionService.profileEvaluation(loan);
             loanStateTransitionService.updateFinalStatus(loan.getId(), finalStatus);
-            if (finalStatus
-                    == ApplicationStatus.UNDER_REVIEW) {
-
+            if (finalStatus == ApplicationStatus.UNDER_REVIEW) {
                 agentLoanAssignService.assignAgent(loan);
+            }
+            if(finalStatus == ApplicationStatus.APPROVED_BY_SYSTEM){
+                notificationService.notifyCustomerPostApproval(loan);
+            }
+            if(finalStatus==ApplicationStatus.REJECTED_BY_SYSTEM){
+                notificationService.notifyCustomerPostRejection(loan);
             }
 
         } catch (Exception ex) {

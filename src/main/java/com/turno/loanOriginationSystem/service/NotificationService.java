@@ -16,4 +16,12 @@ public class NotificationService {
     public void notifyManager(Long managerId, LoanApplication loan) {
         log.info("Notification sent to Manager={} for loanId={}", managerId, loan.getLoanId());
     }
+
+    public void notifyCustomerPostApproval(LoanApplication loan) {
+        log.info("SMS sent to customerPhone={} for approved loanId={}", loan.getCustomerPhone(), loan.getLoanId());
+    }
+
+    public void notifyCustomerPostRejection(LoanApplication loan) {
+        log.info("SMS sent to customerPhone={} for Rejected loanId={}", loan.getCustomerPhone(), loan.getLoanId());
+    }
 }

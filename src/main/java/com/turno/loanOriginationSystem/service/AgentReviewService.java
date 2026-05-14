@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AgentReviewService {
     private final LoanRepository loanRepository;
-
     private final AgentRepository agentRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public void reviewLoan(String loanId, Long agentId, AgentDecisionRequest request) {
@@ -28,9 +28,10 @@ public class AgentReviewService {
 
         if (request.getStatus().equals(ApplicationStatus.APPROVE)) {
             loan.setApplicationStatus(ApplicationStatus.APPROVED_BY_AGENT);
-
+            notificationService.notifyCustomerPostApproval(loan);
         } else {
             loan.setApplicationStatus(ApplicationStatus.REJECTED_BY_AGENT);
+            notificationService.notifyCustomerPostApproval(loan);
         }
 
         Agent agent = agentRepository.findById(agentId).orElseThrow(() -> new IllegalStateException("Agent not found"));
