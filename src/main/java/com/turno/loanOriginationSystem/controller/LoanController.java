@@ -30,7 +30,6 @@ public class LoanController {
         return ResponseEntity.ok(response);
     }
 
-
     @GetMapping("/agents/{agentId}/loans")
     public ResponseEntity<Page<AssignedLoanResponse>> fetchAssignedLoans(@PathVariable Long agentId, @RequestParam(defaultValue = "0")
                                                                     int page, @RequestParam(defaultValue = "10") int size) {
@@ -45,7 +44,7 @@ public class LoanController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<LoanDetailResponse>> fetchLoansByStatus(
+    public ResponseEntity<Page<AssignedLoanResponse>> fetchLoansByStatus(
             @RequestParam ApplicationStatus status,
             @RequestParam(defaultValue = "0")
             int page,

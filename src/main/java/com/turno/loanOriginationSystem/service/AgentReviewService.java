@@ -3,6 +3,7 @@ package com.turno.loanOriginationSystem.service;
 import com.turno.loanOriginationSystem.dto.AgentDecisionRequest;
 import com.turno.loanOriginationSystem.entities.Agent;
 import com.turno.loanOriginationSystem.entities.LoanApplication;
+import com.turno.loanOriginationSystem.enums.AgentDecision;
 import com.turno.loanOriginationSystem.enums.ApplicationStatus;
 import com.turno.loanOriginationSystem.repo.AgentRepository;
 import com.turno.loanOriginationSystem.repo.LoanRepository;
@@ -26,7 +27,7 @@ public class AgentReviewService {
             throw new IllegalStateException("Loan is not under review");
         }
 
-        if (request.getStatus().equals(ApplicationStatus.APPROVE)) {
+        if (request.getDecision() == AgentDecision.APPROVE) {
             loan.setApplicationStatus(ApplicationStatus.APPROVED_BY_AGENT);
             notificationService.notifyCustomerPostApproval(loan);
         } else {

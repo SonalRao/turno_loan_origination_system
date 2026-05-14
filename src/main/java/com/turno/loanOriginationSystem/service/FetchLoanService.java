@@ -17,13 +17,12 @@ public class FetchLoanService {
 
     @Transactional
     public List<String> fetchLoansForProcessing(int limit) {
-        return loanRepository
+        List<LoanApplication> loans = loanRepository
                 .fetchLoansForProcessing(
                         ApplicationStatus.APPLIED.name(),
-                        limit
-                )
-                .stream()
-                .map(LoanApplication::getLoanId)
-                .toList();
+                        limit);
+        loans.forEach(loan-> loan.setApplicationStatus(ApplicationStatus.PROCESSING));
+        loanRepository.saveAll(loans);
+        return loans.stream().map(LoanApplication:: getLoanId).toList();
     }
 }

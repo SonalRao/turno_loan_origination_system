@@ -99,13 +99,13 @@ public class LoanService {
         return response;
     }
 
-    public Page<LoanDetailResponse> fetchLoansByStatus(ApplicationStatus status, int page, int size) {
+    public Page<AssignedLoanResponse> fetchLoansByStatus(ApplicationStatus status, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
         return loanRepository.findByApplicationStatus(status, pageable)
                 .map(loan ->
-                        LoanDetailResponse.builder()
+                        AssignedLoanResponse.builder()
                                 .loanId(loan.getLoanId())
                                 .customerName(loan.getCustomerName())
                                 .customerPhone(loan.getCustomerPhone())

@@ -20,18 +20,17 @@ public class LoanProcessingService {
     public void processLoan(String loanId) {
         try {
             LoanApplication loan = loanStateTransitionService.getLoanById(loanId);
-
-            loanStateTransitionService.markAsProcessing(loan);
             simulateProcessingDelay();
             ApplicationStatus finalStatus = loanDecisionService.profileEvaluation(loan);
             loanStateTransitionService.updateFinalStatus(loan.getId(), finalStatus);
+
             if (finalStatus == ApplicationStatus.UNDER_REVIEW) {
                 agentLoanAssignService.assignAgent(loan);
             }
-            if(finalStatus == ApplicationStatus.APPROVED_BY_SYSTEM){
+            if(finalStatus == ApplicationStatus.APPROVED_BY_SYSTEM) {
                 notificationService.notifyCustomerPostApproval(loan);
             }
-            if(finalStatus==ApplicationStatus.REJECTED_BY_SYSTEM){
+            if(finalStatus == ApplicationStatus.REJECTED_BY_SYSTEM) {
                 notificationService.notifyCustomerPostRejection(loan);
             }
 
