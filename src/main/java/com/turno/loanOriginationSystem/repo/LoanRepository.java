@@ -25,6 +25,7 @@ public interface LoanRepository
 
     Optional<LoanApplication> findByLoanIdAndAssignedAgentId(String loanId, Long agentId);
 
+
     @Query(value = """
             SELECT *
             FROM loan_applications
@@ -74,4 +75,12 @@ public interface LoanRepository
             @Param("phone") String phone,
             @Param("time") LocalDateTime time
     );
+
+    @Query("""
+       SELECT l.applicationStatus,
+              COUNT(l)
+       FROM LoanApplication l
+       GROUP BY l.applicationStatus
+       """)
+    List<Object[]> fetchLoanStatusCounts();
 }

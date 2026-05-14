@@ -1,6 +1,7 @@
 package com.turno.loanOriginationSystem.service;
 
 import com.turno.loanOriginationSystem.dto.AssignedLoanResponse;
+import com.turno.loanOriginationSystem.dto.LoanDetailResponse;
 import com.turno.loanOriginationSystem.dto.LoanRequest;
 import com.turno.loanOriginationSystem.dto.LoanResponse;
 import com.turno.loanOriginationSystem.entities.LoanApplication;
@@ -13,6 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -68,7 +73,6 @@ public class LoanService {
                 .build();
     }
 
-    @Transactional
     public Page<AssignedLoanResponse>  fetchAssignedLoans(Long agentId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
@@ -83,5 +87,37 @@ public class LoanService {
                                 .applicationStatus(loan.getApplicationStatus())
                                 .assignedAgentId(loan.getAssignedAgentId())
                                 .build());
+    }
+
+    public Map<ApplicationStatus, Long> getLoanStatusCounts() {
+        List<Object[]> results = loanRepository.fetchLoanStatusCounts();
+        Map<ApplicationStatus, Long> response = new HashMap<>();
+
+        for (Object[] row : results) {
+            ApplicationStatus status = (ApplicationStatus) row[0];
+            Long count = (Long) row[1];
+            response.put(status, count);
+        }
+
+        return response;
+    }
+
+    public Page<LoanDetailResponse> fetchLoansByStatus(ApplicationStatus status, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return loanRepository.findByApplicationStatus(status, pageable)
+                .map(loan ->
+                        LoanDetailResponse.builder()
+                                .loanId(loan.getLoanId())
+                                .customerName(loan.getCustomerName())
+                                .customerPhone(loan.getCustomerPhone())
+                                .loanAmount(loan.getLoanAmount())
+                                .loanType(loan.getLoanType())
+                                .applicationStatus(loan.getApplicationStatus())
+                                .assignedAgentId(loan.getAssignedAgentId()
+                                )
+                                .build()
+                );
     }
 }
