@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -39,10 +41,9 @@ public class LoanProcessingService {
         }
     }
 
-    private void simulateProcessingDelay()
-            throws InterruptedException {
-
-        Thread.sleep(5000);
+    private void simulateProcessingDelay() throws InterruptedException {
+        int delay= ThreadLocalRandom.current().nextInt(2000,5000);
+        Thread.sleep(delay);
     }
 
 }
