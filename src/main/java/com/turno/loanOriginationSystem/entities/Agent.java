@@ -31,6 +31,7 @@ public class Agent {
 
     private String name;
 
+    @Column(nullable = false)
     private Long managerId;
 
     private Integer activeLoans;

@@ -9,6 +9,5 @@ import lombok.Setter;
 @Setter
 public class AgentDecisionRequest {
 
-    @NotBlank
     private ApplicationStatus status;
 }

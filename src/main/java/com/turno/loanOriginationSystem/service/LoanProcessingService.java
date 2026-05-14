@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class LoanProcessingService {
     private final LoanStateTransitionService loanStateTransitionService;
     private final LoanDecisionService loanDecisionService;
+    private final AgentLoanAssignService agentLoanAssignService;
 
     @Async("loanExecutor")
     public void processLoan(String loanId) {
@@ -23,6 +24,11 @@ public class LoanProcessingService {
             simulateProcessingDelay();
             ApplicationStatus finalStatus = loanDecisionService.profileEvaluation(loan);
             loanStateTransitionService.updateFinalStatus(loan.getId(), finalStatus);
+            if (finalStatus
+                    == ApplicationStatus.UNDER_REVIEW) {
+
+                agentLoanAssignService.assignAgent(loan);
+            }
 
         } catch (Exception ex) {
             log.error("Loan processing failed for loanId={}", loanId, ex);

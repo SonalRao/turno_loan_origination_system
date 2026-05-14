@@ -1,11 +1,15 @@
 package com.turno.loanOriginationSystem.service;
 
+import com.turno.loanOriginationSystem.dto.AssignedLoanResponse;
 import com.turno.loanOriginationSystem.dto.LoanRequest;
 import com.turno.loanOriginationSystem.dto.LoanResponse;
 import com.turno.loanOriginationSystem.entities.LoanApplication;
 import com.turno.loanOriginationSystem.enums.ApplicationStatus;
 import com.turno.loanOriginationSystem.repo.LoanRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,5 +66,22 @@ public class LoanService {
                 .loanId(savedLoan.getLoanId())
                 .status(savedLoan.getApplicationStatus())
                 .build();
+    }
+
+    @Transactional
+    public Page<AssignedLoanResponse>  fetchAssignedLoans(Long agentId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return loanRepository.findByAssignedAgentId(agentId, pageable)
+                .map(loan ->
+                        AssignedLoanResponse.builder()
+                                .loanId(loan.getLoanId())
+                                .customerName(loan.getCustomerName())
+                                .customerPhone(loan.getCustomerPhone())
+                                .loanAmount(loan.getLoanAmount())
+                                .loanType(loan.getLoanType())
+                                .applicationStatus(loan.getApplicationStatus())
+                                .assignedAgentId(loan.getAssignedAgentId())
+                                .build());
     }
 }

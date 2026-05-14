@@ -1,14 +1,16 @@
 package com.turno.loanOriginationSystem.repo;
 
 import com.turno.loanOriginationSystem.entities.Agent;
+import com.turno.loanOriginationSystem.entities.LoanApplication;
 import jakarta.persistence.LockModeType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import java.util.Optional;
 
 public interface AgentRepository
         extends JpaRepository<Agent, Long> {
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query(value = """
             SELECT *
             FROM agents

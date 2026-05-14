@@ -7,5 +7,7 @@ public enum ApplicationStatus {
     APPROVED_BY_SYSTEM,
     REJECTED_BY_SYSTEM,
     APPROVED_BY_AGENT,
-    REJECTED_BY_AGENT
+    REJECTED_BY_AGENT,
+    APPROVE,
+    REJECT
 }
