@@ -24,7 +24,7 @@ public class AgentReviewService {
                         .orElseThrow(() -> new IllegalStateException("Loan not assigned to agent"));
 
         if (loan.getApplicationStatus() != ApplicationStatus.UNDER_REVIEW) {
-            throw new IllegalStateException("Loan is not under review");
+            throw new IllegalStateException();
         }
 
         if (request.getDecision() == AgentDecision.APPROVE) {
