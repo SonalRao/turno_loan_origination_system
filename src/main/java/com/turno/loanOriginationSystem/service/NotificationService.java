@@ -1,6 +1,5 @@
 package com.turno.loanOriginationSystem.service;
 
-
 import com.turno.loanOriginationSystem.entities.Agent;
 import com.turno.loanOriginationSystem.entities.LoanApplication;
 import lombok.extern.slf4j.Slf4j;

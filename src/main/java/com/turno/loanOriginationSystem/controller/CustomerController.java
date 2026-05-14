@@ -1,6 +1,5 @@
 package com.turno.loanOriginationSystem.controller;
 
-
 import com.turno.loanOriginationSystem.dto.TopCustomerResponse;
 import com.turno.loanOriginationSystem.service.LoanService;
 import lombok.RequiredArgsConstructor;
