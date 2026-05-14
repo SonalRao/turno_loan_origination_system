@@ -70,9 +70,6 @@ public class LoanApplication {
     @Column(nullable = false)
     private String idempotencyKey;
 
-    @Version
-    private Long version;
-
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -81,7 +78,6 @@ public class LoanApplication {
     public void prePersist() {
 
         this.loanId = UUID.randomUUID().toString();
-
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }

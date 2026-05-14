@@ -25,6 +25,6 @@ public class AgentLoanAssignService {
         loanRepository.save(loan);
         agentRepository.save(agent);
         notificationService.notifyAgent(agent, loan);
-        notificationService.notifyManager(agent.getManagerId(), loan);
+        notificationService.notifyManager(agent.getManager().getId(), loan);
     }
 }

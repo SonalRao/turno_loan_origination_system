@@ -11,12 +11,10 @@ import lombok.*;
 @Table(
         name = "agents",
         indexes = {
-
                 @Index(
                         name = "idx_agent_manager",
                         columnList = "managerId"
                 ),
-
                 @Index(
                         name = "idx_agent_availability",
                         columnList = "isAvailable, activeLoans"
@@ -31,8 +29,9 @@ public class Agent {
 
     private String name;
 
-    @Column(nullable = false)
-    private Long managerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id", nullable = false)
+    private Agent manager;
 
     private Integer activeLoans;
 
