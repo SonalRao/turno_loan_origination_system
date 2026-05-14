@@ -16,8 +16,8 @@ public class LoanDecisionService {
     private final LoanRepository loanRepository;
     private static int MAX_RECENT_APPLICATIONS = 5;
     private static int MAX_PREVIOUS_REJECTION = 3;
-    private static BigDecimal MAXIMUM_LOAN_APPLICATION_AMOUNT_THRESHOLD = BigDecimal.valueOf(1_000_000);
-    private static BigDecimal MINIMUM_LOAN_APPLICATION_AMOUNT_THRESHOLD = BigDecimal.valueOf(1_000_000);
+    private static final BigDecimal MAXIMUM_LOAN_APPLICATION_AMOUNT_THRESHOLD = BigDecimal.valueOf(1_000_000);
+    private static final BigDecimal MINIMUM_LOAN_APPLICATION_AMOUNT_THRESHOLD = BigDecimal.valueOf(1_000_000);
 
     public ApplicationStatus profileEvaluation(LoanApplication loan
     ) {
@@ -52,14 +52,14 @@ public class LoanDecisionService {
         /*
          * Customer has a Good history and smaller loan
          */
-        if (previousApprovedLoans >= 2 && loan.getLoanAmount().compareTo(MINIMUM_LOAN_APPLICATION_AMOUNT_THRESHOLD)>0) {
+        if (previousApprovedLoans >= 2 && loan.getLoanAmount().compareTo(MINIMUM_LOAN_APPLICATION_AMOUNT_THRESHOLD)<0) {
             return ApplicationStatus.APPROVED_BY_SYSTEM;
         }
 
         /*
         * Customers with smaller loans are approved
          */
-        if(loan.getLoanAmount().compareTo(MINIMUM_LOAN_APPLICATION_AMOUNT_THRESHOLD)>0){
+        if(loan.getLoanAmount().compareTo(MINIMUM_LOAN_APPLICATION_AMOUNT_THRESHOLD)<0){
             return ApplicationStatus.APPROVED_BY_SYSTEM;
         }
         /*

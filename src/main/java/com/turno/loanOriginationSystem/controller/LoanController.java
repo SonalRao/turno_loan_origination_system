@@ -19,7 +19,6 @@ import java.util.Map;
 public class LoanController {
 
     private final LoanService loanService;
-    private final AgentReviewService agentReviewService;
 
     @PostMapping
     public ResponseEntity<LoanResponse> createLoan(@Valid @RequestBody LoanRequest request,
@@ -28,19 +27,6 @@ public class LoanController {
         LoanResponse response = loanService.createLoan(request, idempotencyKey);
 
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/agents/{agentId}/loans")
-    public ResponseEntity<Page<AssignedLoanResponse>> fetchAssignedLoans(@PathVariable Long agentId, @RequestParam(defaultValue = "0")
-                                                                    int page, @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(loanService.fetchAssignedLoans(agentId, page, size));
-    }
-
-    @PutMapping("/agents/{agentId}/loans/{loanId}/decision")
-    public ResponseEntity<Void> reviewLoan(@PathVariable Long agentId, @PathVariable String loanId, @Valid @RequestBody AgentDecisionRequest request) {
-        agentReviewService.reviewLoan(loanId, agentId, request);
-
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping
@@ -57,10 +43,5 @@ public class LoanController {
     @GetMapping("/status-count")
     public ResponseEntity<Map<ApplicationStatus, Long>> getLoanStatusCounts() {
         return ResponseEntity.ok(loanService.getLoanStatusCounts());
-    }
-
-    @GetMapping("/customers/top")
-    public ResponseEntity<List<TopCustomerResponse>> fetchTopCustomers() {
-        return ResponseEntity.ok(loanService.fetchTopCustomers());
     }
 }

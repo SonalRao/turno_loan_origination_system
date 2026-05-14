@@ -26,14 +26,16 @@ public class LoanProcessingService {
             ApplicationStatus finalStatus = loanDecisionService.profileEvaluation(loan);
             loanStateTransitionService.updateFinalStatus(loan.getId(), finalStatus);
 
+            LoanApplication updatedLoan = loanStateTransitionService.getLoanById(loanId);
+
             if (finalStatus == ApplicationStatus.UNDER_REVIEW) {
-                agentLoanAssignService.assignAgent(loan);
+                agentLoanAssignService.assignAgent(updatedLoan);
             }
             if(finalStatus == ApplicationStatus.APPROVED_BY_SYSTEM) {
-                notificationService.notifyCustomerPostApproval(loan);
+                notificationService.notifyCustomerPostApproval(updatedLoan);
             }
             if(finalStatus == ApplicationStatus.REJECTED_BY_SYSTEM) {
-                notificationService.notifyCustomerPostRejection(loan);
+                notificationService.notifyCustomerPostRejection(updatedLoan);
             }
 
         } catch (Exception ex) {
