@@ -1,0 +1,337 @@
+{
+  "info": {
+    "_postman_id": "05c0e842-5ac0-44d2-9770-7c31d46f0987",
+    "name": "Loan_origination_system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54860549",
+    "_collection_link": "https://go.postman.co/collection/54860549-05c0e842-5ac0-44d2-9770-7c31d46f0987?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Create a Loan request- Auto approve by system",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "test-loan-1",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"customerName\": \"Sonal Rao\",\r\n  \"customerPhone\": \"9999999999\",\r\n  \"loanAmount\": 50000,\r\n  \"loanType\": \"PERSONAL\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/loans",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "loans"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create a loan request - Manual Review",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "test-loan-2",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"customerName\": \"Rahul Sharma\",\r\n  \"customerPhone\": \"8888888888\",\r\n  \"loanAmount\": 2500000,\r\n  \"loanType\": \"BUSINESS\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "POST http://localhost:8080/api/v1/loans",
+          "protocol": "POST http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "loans"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Agent loan approval",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"decision\": \"APPROVE\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "PUT http://localhost:8080/api/v1/agents/{agentId}/loans/{loanId}/decision",
+          "protocol": "PUT http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "agents",
+            "{agentId}",
+            "loans",
+            "{loanId}",
+            "decision"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Agent loan rejection",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"decision\": \"REJECT\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "PUT http://localhost:8080/api/v1/agents/1/loans/LOAN-1002/decision",
+          "protocol": "PUT http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "agents",
+            "1",
+            "loans",
+            "LOAN-1002",
+            "decision"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Agent loan decision for a loan not assigned - throw error",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"decision\": \"REJECT\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "PUT http://localhost:8080/api/v1/agents/{agentId}/loans/{unassignedLoadId}/decision",
+          "protocol": "PUT http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "agents",
+            "{agentId}",
+            "loans",
+            "{unassignedLoadId}",
+            "decision"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "fetch loans by with status under review",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "fetch loans by with status Approved by system",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "fetch loans by with status Rejected by system",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/loans?status=REJECTED_BY_SYSTEM&page=0&size=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "loans"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "REJECTED_BY_SYSTEM"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "fetch top customer details",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/loans/status-count",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "loans",
+            "status-count"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "fetch assigned loans per agent",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/agents/{agentId}/loans?page=0&size=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "agents",
+            "{agentId}",
+            "loans"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
